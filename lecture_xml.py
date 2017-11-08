@@ -2,61 +2,55 @@ from lxml import etree
 import os
 import pandas as pd
 import numpy as np
-
-title = []
-description = []
-explicit = []
-duration = []
-url = []
-license = []
-tags = []
-uploader = []
-file = []
-
-
+import json
 
 files = os.listdir("metadata/")
 
 tree = etree.parse("metadata/"+files[0])
 root = tree.getroot()
 
-
 node_name = []
 for child in root:
     node_name.append(child.tag)
 
-print(node_name)
+data = {}
 
-data = np.empty((6, len(node_name)), dtype = np.dtype.str)
+for i in range(len(files)):
 
-for i in range(6):
-    
-    data[i,0] = root.find('title').text
-    data[i,1] = root.find('description').text
-    data[i,2] = root.find('explicit').text
-    data[i,3] = root.find('duration').text
-    data[i,4] = root.find('url').text
+    print(files[i])
+
+    tree = etree.parse("metadata/"+files[i])
+    root = tree.getroot()
+    data[i] = {}
+
+    data[i]["title"] = root.find('title').text
+    data[i]["description"] = root.find('description').text
+    data[i]["explicit"] = root.find('explicit').text
+    data[i]["duration"] = root.find('duration').text
+    data[i]["url"] = root.find('url').text
         
 
-    data[i,5] = {}
+    data[i]['license'] = {}
     for license_tag in root.find('license'):
-        data[i,5][license_tag.tag] = license_tag.text
+        data[i]['license'][license_tag.tag] = license_tag.text
 
-    tags.append([])
+    tag = []
     for V_tag in root.find('tags'):
-        tags[-1].append(V_tag.text)
+        tag.append(V_tag.text)
+    data[i]['tags'] = tag
 
-
-    uploader.append({})
+    data[i]['uploader'] = {}
     for uploader_child in root.find('uploader'):
-        uploader[-1][uploader_child.tag] = uploader_child.text
+        data[i]['uploader'][uploader_child.tag] = uploader_child.text
 
-    file.append({})
+    data[i]['file'] = {}
     for file_child in root.find('file'):
-        file[-1][file_child.tag] = file_child.text
+        data[i]['file'][file_child.tag] = file_child.text
 
 
-print(data)
+with open("created_data/metadata_file.json", "w") as m_file:
+    json.dump(data, m_file)
+
 
 
 
