@@ -4,7 +4,10 @@
 #############################################################
 
 import os
+import re
 import json
+import numpy as np
+import pandas as pd
 from lxml import etree
 from itertools import combinations
 
@@ -51,26 +54,26 @@ for i,(meta,shot,trans) in enumerate(zip(files_meta,files_shot,files_trans)):
     
     # Shots
     
-    shots = {}
+    shots_prof = {}
     try :
         tree = etree.parse("Dataset/shots/XML_shot/" + shot)
         root = tree.getroot()
-        shots["Segment"] = {}
+        shots_prof["Segment"] = {}
         for segs in root.find("Segments"):
             for seg in segs.getiterator():
                 if seg.tag =="Segment":
-                    shots["Segment"] = dict(seg.attrib)
+                    shots_prof["Segment"] = dict(seg.attrib)
                 if seg.tag == "index":
-                    shots["Segment"]["index"] = seg.text
+                    shots_prof["Segment"]["index"] = seg.text
                 if seg.tag == "KeyFrameID":
-                    shots["Segment"]["KeyFrame"] = {}
-                    shots["Segment"]["KeyFrame"]["time"] = dict(seg.attrib)
-                    shots["Segment"]["KeyFrame"]["name"] = seg.text
+                    shots_prof["Segment"]["KeyFrame"] = {}
+                    shots_prof["Segment"]["KeyFrame"]["time"] = dict(seg.attrib)
+                    shots_prof["Segment"]["KeyFrame"]["name"] = seg.text
     except etree.XMLSyntaxError:
-        shots[i] = "empty"
+        shots_prof[i] = "empty"
         pass
     
-    data[i]["shots"] = shots
+    data[i]["shots"] = shots_prof
     
     # Trans
     
@@ -83,8 +86,8 @@ for i,(meta,shot,trans) in enumerate(zip(files_meta,files_shot,files_trans)):
             transcription["Channel"] = dict(chanel.attrib)
     transcription["Speaker"] = {}
     for speaklist in root.find("SpeakerList"):
-        for i,speaker in enumerate(speaklist.getiterator()):
-            transcription["Speaker"]["speaker_"+str(i)] = dict(speaker.attrib)
+        for j,speaker in enumerate(speaklist.getiterator()):
+            transcription["Speaker"]["speaker_"+str(j)] = dict(speaker.attrib)
     words = []
     transcription["SpeechSegment"] = {}
     for seg_list in root.find("SegmentList"):
@@ -98,6 +101,7 @@ for i,(meta,shot,trans) in enumerate(zip(files_meta,files_shot,files_trans)):
         transcription["SpeechSegment"]["Seg_text"] = words
     transcription["text"] = all_words
     
+
     #Suppression des mots dont le score est le plus bas  (a optimiser)
     d = transcription["SpeechSegment"]
     for word1, word2 in combinations(d.keys(), r = 2):
@@ -113,9 +117,16 @@ for i,(meta,shot,trans) in enumerate(zip(files_meta,files_shot,files_trans)):
                         d["Seg_text"].remove(word1)
                     if word1 in all_words:
                         all_words.remove(word1)
-                        
     data[i]["Trans"] = transcription
+
+    # Ajout de la catégorie
     
-with open("./metadata_file.json", "w") as m_file:
+    genre_arr = pd.read_csv("./created_data/Genre.csv", sep=";", header= None)
+    for vid in data.keys():
+        for c,t in zip(genre_arr[0],genre_arr[1]):
+            if re.findall(str(data[vid]["metadata"]["file"]["filename"]),str(t)):
+                data[vid]["categorie"] = np.asscalar(np.int16(c))
+    
+with open("./data_file.json", "w") as m_file:
     json.dump(data, m_file)
 
