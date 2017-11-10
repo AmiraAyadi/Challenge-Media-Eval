@@ -1,12 +1,14 @@
+# -*-coding:Utf-8 -*
+
 from lxml import etree
 import os
 import pandas as pd
 import numpy as np
 import json
 
-files = os.listdir("metadata/")
+files = os.listdir("Dataset/metadata/")
 
-tree = etree.parse("metadata/"+files[0])
+tree = etree.parse("Dataset/metadata/"+files[0])
 root = tree.getroot()
 
 node_name = []
@@ -19,7 +21,7 @@ for i in range(len(files)):
 
     print(files[i])
 
-    tree = etree.parse("metadata/"+files[i])
+    tree = etree.parse("Dataset/metadata/"+files[i])
     root = tree.getroot()
     data[i] = {}
 
