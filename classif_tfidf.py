@@ -1,3 +1,5 @@
+# -*-coding:Utf-8 -*
+
 import pickle
 import os
 import re
@@ -106,6 +108,12 @@ def GetTfIdfMeta(change = False):
         tfidf_gl = TfidfVectorizer(max_df=0.95, min_df=2, max_features=100000) 
 
         tfidf_gl_t = tfidf_gl.fit_transform(all_words)
+
+        with open("created_data/tfidf_meta", 'wb') as fichier:
+            mon_pickler = pickle.Pickler(fichier)
+            mon_pickler.dump(tfidf_gl_t)
+            mon_pickler.dump(y)
+
         return(tfidf_gl_t, y)
 
 
@@ -166,25 +174,58 @@ def GetTfIdfTrans(change = False):
 
         tfidf_gl_t = tfidf_gl.fit_transform(all_words)
 
+        with open("created_data/tfidf_transc", 'wb') as fichier:
+            mon_pickler = pickle.Pickler(fichier)
+            mon_pickler.dump(tfidf_gl_t)
+            mon_pickler.dump(y)
+
         return(tfidf_gl_t, y)
-
-
-def main():
-    tfidf_meta, y_meta = GetTfIdfMeta(True)
-    tfidf_trans, y_transc = GetTfIdfTrans(True)
-
-    tfidf = scipy.sparse.hstack((tfidf_meta, tfidf_trans))
-
-    X_train, X_test, Y_train, Y_test = train_test_split(tfidf, y_transc, test_size = 0.2)
-
-    clf = SGDClassifier(loss='epsilon_insensitive', penalty='none',alpha=1e-3, n_iter=25, random_state=42)
-    clf.fit(X_train, Y_train)
-    print(clf.score(X_test, Y_test))
     
 
+def ClassifTfidf():
+    tfidf_meta, y_meta = GetTfIdfMeta()
+    tfidf_trans, y_transc = GetTfIdfTrans()
+    
+    with open('data_file.json', 'r') as f:
+        data = json.load(f)
+
+    with open("created_data/data/train.pkl", "rb") as f:
+        my_unpickler = pickle.Unpickler(f)
+        train_path = my_unpickler.load()
+
+    train_file = [j.split("/")[-1] for j in train_path[0]]
+
+
+    with open("created_data/data/test.pkl", "rb") as f:
+        my_unpickler = pickle.Unpickler(f)
+        test_path = my_unpickler.load()
+    
+    test_file = [j.split("/")[-1] for j in train_path[0]]
+    
+    id_train = []
+    id_test = []
+    for video in data.keys():
+        if data[video]["metadata"]["file"]["filename"]+".ogv" in train_file:
+            id_train.append(video)
+        else:
+            id_test.append(video)
+        
+    
+
+    tfidf = scipy.sparse.hstack((tfidf_meta, tfidf_trans)).tocsr()
+    tfidf_train = tfidf[id_train]
+    tfidf_test = tfidf[id_test]
+
+    Y_train = [y_transc[int(i)] for i in id_train]
+    Y_test = [y_transc[int(i)] for i in id_test]
+
+    # X_train, X_test, Y_train, Y_test = train_test_split(tfidf, y_transc, test_size = 0.2)
+
+    clf = SGDClassifier(loss='epsilon_insensitive', penalty='none',alpha=1e-3, n_iter=25, random_state=42)
+    clf.fit(tfidf_train, Y_train)
+    print(clf.score(tfidf_test, Y_test))
+    return clf.predict(tfidf_test)
+    
 if __name__ == '__main__':
-    main()
-
-
-
+    ClassifTfidf()
 
