@@ -3,7 +3,7 @@ import numpy as np
 
 from sklearn import cross_validation
 
-def GetRankByCat(Y_test, Y_pred):
+def GetRankByCat(Y_test, Y_pred, print_table = False):
     """
     Param : (Y_test, Y_pred)
     Return : (precision, rappel, F_Mesure)
@@ -34,8 +34,9 @@ def GetRankByCat(Y_test, Y_pred):
     F_Mesure = {}
     for key, val in result.items():
         result[key][1,1] = len(Y_test) - val.sum()
-        print(key)
-        print(result[key])
+        if print_table:
+            print(key)
+            print(result[key])
         precision[key] = result[key][0, 0]/(result[key][0, 0]+result[key][0, 1])
         rappel[key] = result[key][0, 0]/(result[key][0, 0]+result[key][1, 0])
         F_Mesure[key] = (2*precision[key]*rappel[key])/(precision[key]+rappel[key])
