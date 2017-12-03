@@ -37,12 +37,7 @@ def getTrainTest():
     
     y_train = np.squeeze(y_train, axis=0)
     y_test = np.squeeze(y_test, axis=0)
-    
-    
-    
-    #def lstm():
-    """Build a simple LSTM network. We pass the extracted features from
-    our CNN to this model predomenently."""
+   
     
     X_train = np.reshape(X_train,(int(6015/15),15,2048))
     X_test = np.reshape(X_test,(int(2940/15),15,2048))
@@ -110,8 +105,10 @@ if __name__ == '__main__':
     loss,acc = model.evaluate(X_test, y_test,  verbose=0)
     print('The accuracy on the test set is ',(acc*100),'%')
     
+    #Enregistrer le modèle
     model.save('./ModeleRNN3.h5')
     
+    #Importer le modèle
     from keras.models import load_model
     
     model2 = load_model('ModeleRNN3.h5')
