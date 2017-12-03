@@ -19,17 +19,17 @@ scoreT = 84
 coefT = scoreT/(scoreV+scoreT)
 coefV = scoreV/(scoreV+scoreT)
 
+#Probas Images
 V = model2.predict_proba(X_test)
+#Probas Texte
 T = ClassifTfidf()
 
 
 probaCombine = coefV*V +coefT*T
 
-
+#Calcul du score
 np.mean(probaCombine.argmax(1) == y_test.argmax(1))
-#Catégorie 1
 
-def ScoresByModel_1_cat():
     
 
 
