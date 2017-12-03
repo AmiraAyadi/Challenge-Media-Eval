@@ -10,7 +10,7 @@ from math import *
 def DistImg(img1, img2):
     return(sqrt(np.sum((img1-img2)**2)))
 
-def ImageDiff(vid_rep, nb_image = 5):
+def ImageDiff(vid_rep, nb_image = 15):
     list_file_img = os.listdir(vid_rep)
     list_file_img_back = np.asarray(list_file_img)
 
@@ -71,7 +71,7 @@ def ImageDiff(vid_rep, nb_image = 5):
     else : 
         imgs=[0]
 
-    for i in range(4):
+    for i in range(nb_image):
         imgs.append(np.argmax(dist[imgs[-1], :]))
         dist[imgs[-2],:] = 0
         dist[:,imgs[-2]] = 0

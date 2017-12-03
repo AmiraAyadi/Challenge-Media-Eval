@@ -1,6 +1,4 @@
 import numpy as np
-
-
 from sklearn import cross_validation
 
 def GetRankByCat(Y_test, Y_pred, print_table = False):

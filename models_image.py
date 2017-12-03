@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 22 23:14:14 2017
 
-@author: Amira AYADI
-"""
+#Importation des données
+with open('./created_data/data/train.pkl','rb') as f:
+        X_train,y_train = pickle.load(f)
+with open('./created_data/data/X_test.pkl','rb') as f:
+        X_test,y_test = pickle.load(f)
 
-#modèle 
-
+        
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
 sc = StandardScaler()
@@ -117,6 +117,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
 
 
+#cross validation
 #loo = cross_validation.LeaveOneOut(x.shape[0])
 #for train_i, test_i in loo:
 #    score = clf.fit(x[train_i], y[train_i]).score(x[test_i], y[test_i])

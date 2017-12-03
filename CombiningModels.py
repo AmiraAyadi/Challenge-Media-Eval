@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 23 15:11:53 2017
 
-@author: AntoineP
-"""
 from Challenge_Media_Eval_master.texte import ClassifTfidf
 from keras.models import load_model
 from Challenge_Media_Eval_master.RNN import getTrainTest

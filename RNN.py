@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 22 18:20:10 2017
 
-@author: AntoineP
-"""
 from keras.layers.recurrent import LSTM
 from keras.optimizers import Adam, RMSprop
 import pickle

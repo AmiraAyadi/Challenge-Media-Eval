@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 21 15:26:52 2017
 
-@author: Amira AYADI
-"""
 # Image
 
 import os
@@ -13,7 +9,16 @@ import numpy as np
 import pandas as pd
 import mahotas as mt
 
+#Importation données
 
+with open('./created_data/data/X_train.pkl','rb') as f:
+        X_train = pickle.load(f)
+with open('./created_data/data/X_test.pkl','rb') as f:
+        X_test = pickle.load(f)
+with open('./created_data/data/y_train.pkl','rb') as f:
+        y_train = pickle.load(f)
+with open('./created_data/data/y_test.pkl','rb') as f:
+        y_test = pickle.load(f)
 
 '''
 Création des descripteurs : 3D COLOR, Texture, contour

@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Nov 22 11:27:29 2017
 
-@author: AntoineP
-"""
 import pickle
 from keras.preprocessing import image
 from keras.applications.inception_v3 import InceptionV3, preprocess_input

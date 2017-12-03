@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 10 15:21:11 2017
-
-@author: Amira AYADI
-"""
 import os
 import cv2
 from matplotlib import pyplot as plt
@@ -13,7 +8,7 @@ from matplotlib import pyplot as plt
 
 def Resize_img():
         
-    size = (80, 60)
+    size = (100, 100)
     path_w1 = "./created_data/resized_images/AREA/"
     path_w2 = "./created_data/resized_images/CUBIC/"
     path_r = "./created_data/videos_images/"

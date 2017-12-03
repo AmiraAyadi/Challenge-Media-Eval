@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 23 23:55:24 2017
-
-@author: AntoineP
-"""
 import pickle
 import numpy as np
 from xgboost import XGBClassifier

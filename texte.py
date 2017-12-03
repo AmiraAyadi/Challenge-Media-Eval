@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 23 17:45:50 2017
-
-@author: AntoineP
-"""
-
 # -*-coding:Utf-8 -*
 
 import pickle

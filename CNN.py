@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 21 18:06:22 2017
-
-@author: AntoineP
-"""
 
 import os
 import cv2
@@ -78,10 +72,6 @@ for elem in pathVideos:
     img = imread(pathtest + elem +'/'+ image,'L')
     X_test.append(img)
     y_test.append(dicotest[elem])
-
-
-
-    
 
 #Pre-processing
     
