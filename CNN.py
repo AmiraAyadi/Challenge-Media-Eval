@@ -152,14 +152,8 @@ epochs=100
 modelPlus.fit(X_train, y_train, batch_size=batch_size, epochs=epochs,  verbose=1, validation_data=(X_test, y_test))
 
 loss,acc = modelPlus.evaluate(X_test, y_test,  verbose=0)
-index=800
 print('The accuracy on the test set is ',(acc*100),'%')
-plot_mnist_digit(X_test_mat[index])
-cl=model.predict_classes(X_test_mat[index].reshape((1,28,28,1)))
 
-
-print("le chiffre reconnu est: ", cl[0])
-print("le chiffre à reconnaitre  est: ", np.argmax(y_test_cat[index]))
 
 
 
